@@ -1,0 +1,93 @@
+[
+  {
+    "name": "Get Portfolios for Voting",
+    "method": "GET",
+    "url": "/api/voting/portfolios/?voter_id=VOTER123",
+    "request": {},
+    "response": [
+      {
+        "port_id": 1,
+        "port_name": "President",
+        "port_priority": 1,
+        "election": 1,
+        "election_title": "2025 Student Election",
+        "level_restriction": "400",
+        "gender_restriction": "any",
+        "created_at": "2025-08-01T10:00:00Z",
+        "updated_at": "2025-08-10T10:00:00Z",
+        "has_voted": false,
+        "candidates": [
+          {
+            "cand_id": 1,
+            "portfolio": 1,
+            "portfolio_name": "President",
+            "cand_fname": "John Doe",
+            "profile_picture": "/media/candidates/john.jpg",
+            "ballot_num": 1,
+            "election": 1,
+            "election_title": "2025 Student Election",
+            "created_at": "2025-08-01T10:00:00Z",
+            "updated_at": "2025-08-10T10:00:00Z"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cast Votes",
+    "method": "POST",
+    "url": "/api/voting/cast_vote/",
+    "request": [
+      {
+        "voter_id": "VOTER123",
+        "portfolio": 1,
+        "candidate": 1,
+        "skip_vote": false
+      },
+      {
+        "voter_id": "VOTER123",
+        "portfolio": 2,
+        "candidate": null,
+        "skip_vote": true
+      }
+    ],
+    "response": {
+      "results": [
+        {
+          "vote_id": 101,
+          "candidate": 1,
+          "candidate_name": "John Doe",
+          "portfolio": 1,
+          "portfolio_name": "President",
+          "skip_vote": false,
+          "vote_time": "2025-08-27T10:15:00Z",
+          "election": 1,
+          "election_title": "2025 Student Election",
+          "has_voted": true
+        },
+        {
+          "vote_id": 102,
+          "candidate": null,
+          "candidate_name": null,
+          "portfolio": 2,
+          "portfolio_name": "Vice President",
+          "skip_vote": true,
+          "vote_time": "2025-08-27T10:16:00Z",
+          "election": 1,
+          "election_title": "2025 Student Election",
+          "has_voted": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "Get Election Time Info",
+    "method": "GET",
+    "url": "/api/vote-time/?election=1",
+    "request": {},
+    "response": {
+      "server_time": "2025-08-27T10:20:00Z",
+      "election_start": "2025-08-27T09:00:00Z",
+      "election_end": "2025-08-27T17:00:00Z",
+      "time_remaining_minutes": 400
+    }

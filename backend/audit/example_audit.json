@@ -1,0 +1,56 @@
+{
+  
+  "audit_logs": [
+    {
+      "name": "List Audit Logs",
+      "method": "GET",
+      "url": "/api/audit/logs/",
+      "headers": {
+        "Authorization": "<admin_token or superadmin_token>"
+      },
+      "response": [
+        {
+          "log_id": 1,
+          "user": 2,
+          "user_email": "admin@example.com",
+          "voter": null,
+          "voter_id": null,
+          "log_action": "login",
+          "ip_address": "192.168.1.10",
+          "description": "User admin@example.com logged in",
+          "log_time": "2025-08-27T10:00:00Z"
+        },
+        {
+          "log_id": 2,
+          "user": null,
+          "user_email": null,
+          "voter": "VOTER123",
+          "voter_id": "VOTER123",
+          "log_action": "generate_otp",
+          "ip_address": "192.168.1.11",
+          "description": "Generated OTP for voter VOTER123",
+          "log_time": "2025-08-27T10:05:00Z"
+        }
+      ]
+    },
+    {
+      "name": "Retrieve Audit Log",
+      "method": "GET",
+      "url": "/api/audit/logs/1/",
+      "headers": {
+        "Authorization": "<admin_token or superadmin_token>"
+      },
+      "response": {
+        "log_id": 1,
+        "user": 2,
+        "user_email": "admin@example.com",
+        "voter": null,
+        "voter_id": null,
+        "log_action": "login",
+        "ip_address": "192.168.1.10",
+        "description": "User admin@example.com logged in",
+        "log_time": "2025-08-27T10:00:00Z"
+      }
+    }
+  ]
+}
