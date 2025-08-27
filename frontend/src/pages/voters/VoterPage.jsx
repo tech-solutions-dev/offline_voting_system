@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import BallotCards from "../components/BallotCards";
-import ReviewSelections from "../components/ReviewSelections";
-import SidebarSteps from "../components/SidebarSteps";
+import BallotCards from "../../components/voters/BallotCards";
+import ReviewSelections from "../../components/voters/ReviewSelections";
+import SidebarSteps from "../../components/voters/SidebarSteps";
 
 export default function VoterPage() {
   const ballotPortfolios = [
