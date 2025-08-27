@@ -109,6 +109,7 @@ export default function VoterPage() {
         reviewMode={reviewMode}
         selections={selections}
         setCurrentStep={setCurrentStep}
+        setReviewMode={setReviewMode}
       />
 
       <div className="flex-1 flex items-start justify-center p-6">
