@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function LoginPage() {
+export default function VoterLoginPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",

@@ -13,8 +13,9 @@ export default function BallotCards({
   const candidate = isUnopposed ? portfolio.candidates[0] : null;
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md border border-gray-100 w-full max-w-2xl h-[600px] flex flex-col">
-      <div className="text-center">
+    <div className="p-4 w-full max-w-2xl flex flex-col">
+      {/* Header */}
+      <div className="text-center mb-2">
         <h3 className="text-xl font-bold text-gray-800">
           {portfolio.position}
         </h3>
@@ -25,10 +26,11 @@ export default function BallotCards({
         </p>
       </div>
 
+      {/* Candidate List */}
       <div className="flex-1 mt-3">
         {isUnopposed ? (
           <div
-            className={`relative flex flex-col items-center justify-center space-y-3 p-4 border rounded-lg h-full transition ${
+            className={`relative flex flex-col items-center justify-center space-y-3 p-4 border rounded-lg transition ${
               selectedCandidate?.name === candidate.name
                 ? "border-green-500 ring-2 ring-green-400 bg-green-50"
                 : "border-gray-200 bg-gray-50"
@@ -74,7 +76,7 @@ export default function BallotCards({
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 h-full">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {portfolio.candidates.map((candidate, index) => {
               const isSelected =
                 selectedCandidate?.name === candidate.name &&
