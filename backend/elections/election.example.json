@@ -1,0 +1,198 @@
+[
+  {
+    "name": "List Elections",
+    "method": "GET",
+    "url": "/api/elections/",
+    "response": [
+      {
+        "id": 1,
+        "title": "2025 Student Election",
+        "start_time": "2025-08-27T09:00:00Z",
+        "end_time": "2025-08-27T17:00:00Z",
+        "is_active": true,
+        "created_at": "2025-08-01T10:00:00Z",
+        "updated_at": "2025-08-10T10:00:00Z",
+        "is_ongoing": true,
+        "has_started": true,
+        "has_ended": false,
+        "time_remaining_minutes": 120
+      }
+    ]
+  },
+  {
+    "name": "Create Election",
+    "method": "POST",
+    "url": "/api/elections/",
+    "body": {
+      "title": "2026 Student Election",
+      "start_time": "2026-08-27T09:00:00Z",
+      "end_time": "2026-08-27T17:00:00Z",
+      "is_active": true
+    },
+    "response": {
+      "id": 2,
+      "title": "2026 Student Election",
+      "start_time": "2026-08-27T09:00:00Z",
+      "end_time": "2026-08-27T17:00:00Z",
+      "is_active": true,
+      "created_at": "2026-08-01T10:00:00Z",
+      "updated_at": "2026-08-01T10:00:00Z",
+      "is_ongoing": false,
+      "has_started": false,
+      "has_ended": false,
+      "time_remaining_minutes": 480
+    }
+  },
+  {
+    "name": "Adjust Election Time",
+    "method": "POST",
+    "url": "/api/elections/1/adjust_time/",
+    "body": {
+      "end_time": "2025-08-27T18:00:00Z"
+    },
+    "response": {
+      "message": "Election time adjusted successfully"
+    }
+  },
+  {
+    "name": "Get Election Results",
+    "method": "GET",
+    "url": "/api/elections/1/results/",
+    "response": [
+      {
+        "portfolio_id": 1,
+        "portfolio_name": "President",
+        "total_votes": 200,
+        "skipped_votes": 5,
+        "candidates": [
+          {
+            "id": 1,
+            "name": "John Doe",
+            "ballot_num": 1,
+            "votes": 120,
+            "percentage": 60.0
+          },
+          {
+            "id": 2,
+            "name": "Jane Smith",
+            "ballot_num": 2,
+            "votes": 80,
+            "percentage": 40.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Check Remaining Time",
+    "method": "GET",
+    "url": "/api/elections/1/remaining_time/",
+    "response": {
+      "remaining_minutes": 90
+    }
+  },
+  {
+    "name": "List Portfolios",
+    "method": "GET",
+    "url": "/api/portfolios/",
+    "response": [
+      {
+        "port_id": 1,
+        "port_name": "President",
+        "port_priority": 1,
+        "election": 1,
+        "election_title": "2025 Student Election",
+        "level_restriction": "400",
+        "gender_restriction": "any",
+        "department_restriction": "Computer Science",
+        "created_at": "2025-08-01T10:00:00Z",
+        "updated_at": "2025-08-10T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "name": "Update Level Restriction",
+    "method": "PATCH",
+    "url": "/api/portfolios/1/update_level/",
+    "body": {
+      "level_restriction": "200"
+    },
+    "response": {
+      "message": "Level restriction updated successfully"
+    }
+  },
+  {
+    "name": "Update Gender Restriction",
+    "method": "PATCH",
+    "url": "/api/portfolios/1/update_gender/",
+    "body": {
+      "gender_restriction": "female"
+    },
+    "response": {
+      "message": "Gender restriction updated successfully"
+    }
+  },
+  {
+    "name": "Update Department Restriction",
+    "method": "PATCH",
+    "url": "/api/portfolios/1/update_department/",
+    "body": {
+      "department_restriction": "Mathematics"
+    },
+    "response": {
+      "message": "Department restriction updated successfully"
+    }
+  },
+  {
+    "name": "List Candidates",
+    "method": "GET",
+    "url": "/api/candidates/",
+    "response": [
+      {
+        "cand_id": 1,
+        "portfolio": 1,
+        "portfolio_name": "President",
+        "cand_fname": "John Doe",
+        "profile_picture": "/media/candidates/john.jpg",
+        "ballot_num": 1,
+        "election": 1,
+        "election_title": "2025 Student Election",
+        "created_at": "2025-08-01T10:00:00Z",
+        "updated_at": "2025-08-10T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "name": "Update Ballot Number",
+    "method": "PATCH",
+    "url": "/api/candidates/1/update_ballot_num/",
+    "body": {
+      "ballot_num": 5
+    },
+    "response": {
+      "message": "Ballot number updated successfully"
+    }
+  },
+  {
+    "name": "Update Profile Picture",
+    "method": "PATCH",
+    "url": "/api/candidates/1/update_profile_picture/",
+    "body": {
+      "profile_picture": "<binary image file>"
+    },
+    "response": {
+      "message": "Profile picture updated successfully"
+    }
+  },
+  {
+    "name": "Update Candidate Portfolio",
+    "method": "PATCH",
+    "url": "/api/candidates/1/update_portfolio/",
+    "body": {
+      "portfolio": 2
+    },
+    "response": {
+      "message": "Portfolio updated successfully"
+    }
+  }
+]
