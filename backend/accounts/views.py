@@ -20,6 +20,7 @@ from rest_framework.decorators import action
 
 class UserLoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data)
