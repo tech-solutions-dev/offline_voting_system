@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "../../components/shared/Modal";
 import api from "../../services/api";
 import { toast } from "react-toastify";
+import { fetchElections } from "../../services/Utils";
 
 // Election Management Component
 export function ElectionManagement() {
@@ -17,12 +18,14 @@ export function ElectionManagement() {
     title: "",
     start_time: "",
     end_time: "",
+    is_active: false,
   });
 
   const [editElection, setEditElection] = useState({
     title: "",
     start_time: "",
     end_time: "",
+    is_active: false,
   });
 
   const handleEdit = (election) => {
@@ -31,6 +34,7 @@ export function ElectionManagement() {
       title: election.title,
       start_time: election.start_time,
       end_time: election.end_time,
+      is_active: election.is_active,
     });
     setShowEditForm(true);
   };
@@ -40,21 +44,12 @@ export function ElectionManagement() {
     setShowDeleteConfirm(true);
   };
 
-  const fetchElections = async () => {
-    try {
-      const response = await api.get(`${BASE_URL}api/elections/elections/`);
-      if (response.status === 200) {
-        console.log(response.data.results);
-        setElections(response.data.results);
-      }
-    } catch (error) {
-      toast.error("Error fetching elections");
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    fetchElections();
+    const loadElections = async () => {
+      const elections = await fetchElections(BASE_URL);
+      setElections(elections);
+    };
+    loadElections();
   }, []);
 
   const confirmDelete = async () => {
@@ -66,11 +61,10 @@ export function ElectionManagement() {
         toast.success("Election deleted successfully");
         setShowDeleteConfirm(false);
         setSelectedElection(null);
-        fetchElections(); // Refresh the list
+        fetchElections(BASE_URL);
       }
     } catch (error) {
       toast.error("Error deleting election");
-      console.error(error);
     }
   };
 
@@ -85,9 +79,14 @@ export function ElectionManagement() {
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Election created successfully");
-        setNewElection({ title: "", start_time: "", end_time: "" });
+        setNewElection({
+          title: "",
+          start_time: "",
+          end_time: "",
+          is_active: false,
+        });
         setShowCreateForm(false);
-        fetchElections(); // Refresh the list
+        fetchElections(BASE_URL);
       } else {
         toast.error("Failed to create election");
       }
@@ -108,10 +107,15 @@ export function ElectionManagement() {
 
       if (response.status === 200) {
         toast.success("Election updated successfully");
-        setEditElection({ title: "", start_time: "", end_time: "" });
+        setEditElection({
+          title: "",
+          start_time: "",
+          end_time: "",
+          is_active: false,
+        });
         setShowEditForm(false);
         setSelectedElection(null);
-        fetchElections(); // Refresh the list
+        fetchElections(BASE_URL);
       } else {
         toast.error("Failed to update election");
       }
@@ -135,7 +139,6 @@ export function ElectionManagement() {
         </button>
       </div>
 
-      {/* Create Election Modal */}
       {showCreateForm && (
         <Modal
           isOpen={showCreateForm}
@@ -196,6 +199,26 @@ export function ElectionManagement() {
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={newElection.is_active}
+                    onChange={(e) =>
+                      setNewElection({
+                        ...newElection,
+                        is_active: e.target.checked,
+                      })
+                    }
+                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">
+                    Active Election
+                  </span>
+                </label>
+              </div>
+
               <div className="flex space-x-3">
                 <button
                   type="submit"
@@ -215,8 +238,6 @@ export function ElectionManagement() {
           </div>
         </Modal>
       )}
-
-      {/* Edit Election Modal */}
       {showEditForm && (
         <Modal
           isOpen={showEditForm}
@@ -277,6 +298,27 @@ export function ElectionManagement() {
                   />
                 </div>
               </div>
+
+              {/* ✅ Active Checkbox */}
+              <div>
+                <label className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={editElection.is_active}
+                    onChange={(e) =>
+                      setEditElection({
+                        ...editElection,
+                        is_active: e.target.checked,
+                      })
+                    }
+                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">
+                    Active Election
+                  </span>
+                </label>
+              </div>
+
               <div className="flex space-x-3">
                 <button
                   type="submit"
