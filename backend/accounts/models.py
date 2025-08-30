@@ -9,14 +9,15 @@ class CustomUserManager(BaseUserManager):
     """
     Custom user manager for the CustomUser model.
     """
-    def create_user(self, username, email=None, password=None, **extra_fields):
+    def create_user(self, username=None, email=None, password=None, **extra_fields):
         """
         Create and return a regular user with an email and password.
         """
+        if not email:
+            raise ValueError('The Email field must be set')
         if not username:
-            raise ValueError('The Username field must be set')
-        if email:
-            email = self.normalize_email(email)
+            username = email
+        email = self.normalize_email(email)
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         user = self.model(username=username, email=email, **extra_fields)
@@ -24,7 +25,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email=None, password=None, **extra_fields):
+    def create_superuser(self, username=None, email=None, password=None, **extra_fields):
         """
         Create and return a superuser with an email and password.
         """
@@ -34,6 +35,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
+        if not username:
+            username = email
         return self.create_user(username, email, password, **extra_fields)
 
 class User(AbstractUser):

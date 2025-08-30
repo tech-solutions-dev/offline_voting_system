@@ -68,3 +68,303 @@ Traceback (most recent call last):
     if not voter.election.is_ongoing:
            ^^^^^
 UnboundLocalError: cannot access local variable 'voter' where it is not associated with a value
+ERROR 2025-08-30 17:26:24,244 log 5916 10184 Internal Server Error: /api/auth/voter_login/
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'lower'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 420, in initial
+    self.perform_authentication(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 330, in perform_authentication
+    request.user
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 231, in user
+    with wrap_attributeerrors():
+         ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 78, in wrap_attributeerrors
+    raise exc.with_traceback(info[2])
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+rest_framework.request.WrappedAttributeError: 'NoneType' object has no attribute 'lower'
+ERROR 2025-08-30 17:26:34,620 log 5916 10184 Internal Server Error: /api/auth/voter_login/
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'lower'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 420, in initial
+    self.perform_authentication(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 330, in perform_authentication
+    request.user
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 231, in user
+    with wrap_attributeerrors():
+         ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 78, in wrap_attributeerrors
+    raise exc.with_traceback(info[2])
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+rest_framework.request.WrappedAttributeError: 'NoneType' object has no attribute 'lower'
+ERROR 2025-08-30 17:26:45,581 log 5916 4664 Internal Server Error: /api/auth/login/
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'lower'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 420, in initial
+    self.perform_authentication(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 330, in perform_authentication
+    request.user
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 231, in user
+    with wrap_attributeerrors():
+         ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 78, in wrap_attributeerrors
+    raise exc.with_traceback(info[2])
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+rest_framework.request.WrappedAttributeError: 'NoneType' object has no attribute 'lower'
+ERROR 2025-08-30 17:27:21,591 log 5916 15036 Internal Server Error: /api/auth/voter_login/
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'lower'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 420, in initial
+    self.perform_authentication(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 330, in perform_authentication
+    request.user
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 231, in user
+    with wrap_attributeerrors():
+         ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 78, in wrap_attributeerrors
+    raise exc.with_traceback(info[2])
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+rest_framework.request.WrappedAttributeError: 'NoneType' object has no attribute 'lower'
+ERROR 2025-08-30 17:27:40,227 log 5916 15036 Internal Server Error: /api/auth/
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'lower'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 420, in initial
+    self.perform_authentication(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\views.py", line 330, in perform_authentication
+    request.user
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 231, in user
+    with wrap_attributeerrors():
+         ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 78, in wrap_attributeerrors
+    raise exc.with_traceback(info[2])
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 74, in wrap_attributeerrors
+    yield
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 232, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ModernTech\.virtualenvs\evoting_system-M8NHDx1B\Lib\site-packages\rest_framework\request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "C:\Users\ModernTech\Desktop\react\django\evoting_system\offline_voting_system\backend\accounts\auth.py", line 8, in authenticate
+    token = auth_header.lower().split(' ')[1]
+            ^^^^^^^^^^^^^^^^^
+rest_framework.request.WrappedAttributeError: 'NoneType' object has no attribute 'lower'
