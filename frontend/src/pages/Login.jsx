@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import api from "../services/api";
+import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { setToken, setUser } from "../utils/auth";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const BASE_URL = import.meta.env.VITE_API_URL;
+  // api client will use VITE_API_URL as its base
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,36 +22,46 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    // setTimeout(() => {
+    //   const voter = {
+    //     user: {
+    //       email: "admin@gmail.com",
+    //       role: formData.password,
+    //     },
+    //     token: "sdjfsd9fsdxj9dxddx9x",
+    //   }
+    //   setUser(voter.user);
+    //   setToken(voter.token);
+    //   navigate(`/vote`)
+    // }, 3000)
 
     try {
-      const response = await api.post(`${BASE_URL}api/auth/login/`, formData);
+      const response = await api.post(`/api/auth/login/`, formData);
 
       if (response.status === 200) {
-        const { token, role } = response.data.user;
+        // response.data.user contains token, role, email per FINAL_API.json
+        const { user } = response.data;
+        const token = user?.token || response.data?.token;
+        const role = user?.role;
+        const email = user?.email;
 
         if (!token || !role) {
           toast.error("Invalid server response");
           return;
         }
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("role", role);
+        setToken(token);
+        setUser({ role, email });
 
-        if (role === "admin") {
-          navigate("/admin");
-        } else if (role === "superadmin") {
-          navigate("/super-admin");
-        } else {
-          navigate("/generate-password");
-        }
+        if (role === "admin") navigate("/admin");
+        else if (role === "superadmin") navigate("/super-admin");
+        else navigate("/generate-password");
 
         toast.success("Login successful");
       }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
-      toast.error(
-        error.response?.data?.error || "Invalid credentials or server error"
-      );
+      toast.error(error.response?.data?.error || "Invalid credentials or server error");
     } finally {
       setIsLoading(false);
     }

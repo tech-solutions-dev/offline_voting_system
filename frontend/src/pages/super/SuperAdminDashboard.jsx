@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
-import api from "../../services/api";
-import { toast } from "react-toastify";
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState("elections");
@@ -10,8 +8,10 @@ export default function SuperAdminDashboard() {
   const BASE_URL = import.meta.env.VITE_API_URL || "";
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("election_token");
+    localStorage.removeItem("user");
     navigate("/admin/login");
+
   };
 
   return (

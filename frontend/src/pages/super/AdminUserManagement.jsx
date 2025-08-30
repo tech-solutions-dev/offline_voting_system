@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "../../components/shared/Modal";
-import api from "../../services/api";
+import api from "../../utils/api";
+import { toast } from "react-toastify";
 // Admin User Management Component
 export function AdminUserManagement() {
   const [admins, setAdmins] = useState([
@@ -19,22 +20,20 @@ export function AdminUserManagement() {
   const handleCreateAdmin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`${BASE_URL}api/users/`, admins);
+      // create a new admin user
+      const response = await api.post(`/api/auth/users/`, newAdmin);
 
       if (response.status === 201 || response.status === 200) {
-        toast.success(response.message);
-        setNewAdmin({
-          name: "",
-          email: "",
-          role: "Election Admin",
-          password: "",
-        });
+        toast.success(response.data?.message || "Admin created");
+        // update local list
+        setAdmins((prev) => [...prev, response.data]);
+        setNewAdmin({ name: "", email: "", role: "Election Admin (EC)", password: "" });
         setShowCreateForm(false);
       } else {
-        toast.error("Failed to create election");
+        toast.error("Failed to create admin user");
       }
     } catch (error) {
-      toast.error("Error creating election");
+      toast.error(error.response?.data?.error || "Error creating admin user");
       console.error(error);
     }
   };
@@ -86,9 +85,8 @@ export function AdminUserManagement() {
                   onChange={(e) => setNewAdmin({ ...newAdmin, role: e.target.value })}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
                 >
-                  <option value="Election Admin">Election Admin (EC)</option>
-                  <option value="Polling Agent">Polling Agent</option>
-                  <option value="System Admin">System Admin (Super Admin)</option>
+                  <option value="admin">Election Admin (EC)</option>
+                  <option value="superadmin">System Admin (Super Admin)</option>
                 </select>
               </div>
               <div>

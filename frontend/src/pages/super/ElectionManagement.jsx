@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "../../components/shared/Modal";
-import api from "../../services/api";
+import api from "../../utils/api";
 import { toast } from "react-toastify";
 
 // Election Management Component
@@ -11,7 +11,6 @@ export function ElectionManagement() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selectedElection, setSelectedElection] = useState(null);
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const [newElection, setNewElection] = useState({
     title: "",
@@ -42,10 +41,11 @@ export function ElectionManagement() {
 
   const fetchElections = async () => {
     try {
-      const response = await api.get(`${BASE_URL}api/elections/elections/`);
+      const response = await api.get(`/api/elections/elections/`);
       if (response.status === 200) {
-        console.log(response.data.results);
-        setElections(response.data.results);
+        // backend may return a list or a paginated object with `results`
+        const data = response.data;
+        setElections(data.results || data || []);
       }
     } catch (error) {
       toast.error("Error fetching elections");
@@ -60,7 +60,7 @@ export function ElectionManagement() {
   const confirmDelete = async () => {
     try {
       const response = await api.delete(
-        `${BASE_URL}api/elections/elections/${selectedElection.id}/`
+        `/api/elections/elections/${selectedElection.id}/`
       );
       if (response.status === 200 || response.status === 204) {
         toast.success("Election deleted successfully");
@@ -78,10 +78,7 @@ export function ElectionManagement() {
     e.preventDefault();
 
     try {
-      const response = await api.post(
-        `${BASE_URL}api/elections/elections/`,
-        newElection
-      );
+      const response = await api.post(`/api/elections/elections/`, newElection);
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Election created successfully");
@@ -102,7 +99,7 @@ export function ElectionManagement() {
 
     try {
       const response = await api.put(
-        `${BASE_URL}api/elections/elections/${selectedElection.id}/`,
+        `/api/elections/elections/${selectedElection.id}/`,
         editElection
       );
 
@@ -350,7 +347,7 @@ export function ElectionManagement() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {elections.map((election) => (
+            {elections && elections.map((election) => (
               <tr key={election.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {election.title}
