@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "../../components/shared/Modal";
-
+import api from "../../services/api";
 // Admin User Management Component
 export function AdminUserManagement() {
   const [admins, setAdmins] = useState([
@@ -16,18 +16,27 @@ export function AdminUserManagement() {
     password: ""
   });
 
-  const handleCreateAdmin = (e) => {
+  const handleCreateAdmin = async (e) => {
     e.preventDefault();
-    const admin = {
-      id: admins.length + 1,
-      name: newAdmin.name,
-      email: newAdmin.email,
-      role: newAdmin.role,
-      status: "active"
-    };
-    setAdmins([...admins, admin]);
-    setNewAdmin({ name: "", email: "", role: "Election Admin", password: "" });
-    setShowCreateForm(false);
+    try {
+      const response = await api.post(`${BASE_URL}api/users/`, admins);
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success(response.message);
+        setNewAdmin({
+          name: "",
+          email: "",
+          role: "Election Admin",
+          password: "",
+        });
+        setShowCreateForm(false);
+      } else {
+        toast.error("Failed to create election");
+      }
+    } catch (error) {
+      toast.error("Error creating election");
+      console.error(error);
+    }
   };
 
   return (

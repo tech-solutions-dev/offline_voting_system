@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
+import api from "../../services/api";
+import { toast } from "react-toastify";
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState("elections");
+  const [elections, setElections] = useState([]);
   const navigate = useNavigate();
+  const BASE_URL = import.meta.env.VITE_API_URL || "";
 
   const handleLogout = () => {
-    navigate("/");
+    localStorage.removeItem("token");
+    navigate("/admin/login");
   };
 
   return (
@@ -15,9 +20,9 @@ export default function SuperAdminDashboard() {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">Super Admin Dashboard</h1>
-            </div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Super Admin Dashboard
+            </h1>
             <button
               onClick={handleLogout}
               className="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-500"
@@ -33,10 +38,26 @@ export default function SuperAdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8">
             {[
-              { id: "elections", label: "Election Management", href: "/super-admin/" },
-              { id: "admins", label: "Admin Users", href: "/super-admin/admin-user-management" },
-              { id: "settings", label: "System Settings", href: "/super-admin/system-settings" },
-              { id: "results", label: "Global Results", href: "/super-admin/global-results-view" }
+              {
+                id: "elections",
+                label: "Election Management",
+                href: "/super-admin/",
+              },
+              {
+                id: "admins",
+                label: "Admin Users",
+                href: "/super-admin/admin-user-management",
+              },
+              {
+                id: "settings",
+                label: "System Settings",
+                href: "/super-admin/system-settings",
+              },
+              {
+                id: "results",
+                label: "Global Results",
+                href: "/super-admin/global-results-view",
+              },
             ].map((tab) => (
               <Link
                 key={tab.id}
@@ -57,9 +78,9 @@ export default function SuperAdminDashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Outlet />
+        {/* Pass elections down through Outlet context */}
+        <Outlet context={{ elections, setElections }} />
       </main>
     </div>
   );
 }
-

@@ -48,8 +48,10 @@ class VoterLoginView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = VoterLoginSerializer(data=request.data)
         if serializer.is_valid():
+
             voter = serializer.validated_data['voter']
             token = serializer.validated_data['token']
+            print(voter)
 
             # Check if election is ongoing
         # Check if election is ongoing
