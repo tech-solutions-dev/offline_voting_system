@@ -1,0 +1,608 @@
+{
+  "info": {
+    "title": "Offline Voting System - API Reference",
+    "version": "1.0",
+    "description": "Comprehensive list of backend API endpoints, request/response schemas, authentication notes, and examples for frontend integration. Generated from the Django REST Framework backend code.",
+    "base_path": "/api/"
+  },
+  "endpoints": [
+    {
+      "path": "auth/login/",
+      "full_path": "/api/auth/login/",
+      "method": "POST",
+      "summary": "User (admin/polling_agent/superadmin) login",
+      "auth": "None",
+      "request": {
+        "content_type": "application/json",
+        "body": {
+          "email": "string",
+          "password": "string"
+        },
+        "example": { "email": "admin@example.com", "password": "secret" }
+      },
+      "response": {
+        "200": {
+          "description": "Login successful",
+          "body": {
+            "user": { "token": "string", "role": "string", "email": "string" },
+            "message": "Login successful"
+          }
+        },
+        "401": {
+          "description": "Invalid credentials",
+          "body": { "detail": "string or error object" }
+        },
+        "400": {
+          "description": "Election/permission related errors",
+          "body": { "error": "string" }
+        }
+      },
+      "notes": "Returns authentication token in `user.token`. Frontend should store token and include it in `Authorization: Token <token>` for protected endpoints. If role is not `superadmin`, login is restricted by election settings."
+    },
+    {
+      "path": "auth/voter_login/",
+      "full_path": "/api/auth/voter_login/",
+      "method": "POST",
+      "summary": "Voter login by `voter_id` and `password`",
+      "auth": "None",
+      "request": {
+        "content_type": "application/json",
+        "body": { "voter_id": "string", "password": "string" },
+        "example": { "voter_id": "VOTER123", "password": "votepass" }
+      },
+      "response": {
+        "200": {
+          "description": "Login successful",
+          "body": {
+            "voter": {
+              "token": "string",
+              "voter_id": "string",
+              "level": "string",
+              "gender": "string"
+            },
+            "message": "Login successful"
+          }
+        },
+        "400": {
+          "description": "Election not active or already voted or invalid creds",
+          "body": { "error": "string" }
+        }
+      },
+      "notes": "Returned `token` should be used for subsequent voter-protected actions. The view checks `voter.election.is_ongoing` and whether the voter has already voted."
+    },
+    {
+      "path": "auth/logout/",
+      "full_path": "/api/auth/logout/",
+      "method": "POST",
+      "summary": "User logout (invalidate token)",
+      "auth": "Token required (request.user expected)",
+      "request": {
+        "content_type": "application/json",
+        "body": {},
+        "example": {}
+      },
+      "response": {
+        "200": { "body": { "message": "Logout successful" } },
+        "401": { "body": { "error": "Not authenticated" } }
+      }
+    },
+    {
+      "path": "auth/voter_logout/",
+      "full_path": "/api/auth/voter_logout/",
+      "method": "POST",
+      "summary": "Voter logout (invalidate token)",
+      "auth": "Token required",
+      "request": {
+        "content_type": "application/json",
+        "body": {},
+        "example": {}
+      },
+      "response": {
+        "200": { "body": { "message": "Logout successful" } },
+        "401": { "body": { "error": "Not authenticated" } }
+      }
+    },
+    {
+      "path": "auth/me/",
+      "full_path": "/api/auth/me/",
+      "method": "GET",
+      "summary": "Get current authenticated user or voter profile",
+      "auth": "Token required",
+      "request": { "query_params": {}, "example": {} },
+      "response": {
+        "200": { "body": "UserSerializer or VoterSerializer object" },
+        "401": {
+          "body": { "detail": "Authentication credentials were not provided." }
+        }
+      },
+      "notes": "If authenticated user has `voter_id` attribute, returns `VoterSerializer` fields, otherwise `UserSerializer`."
+    },
+    {
+      "path": "auth/generate-otp/{voter_id}/",
+      "full_path": "/api/auth/generate-otp/{voter_id}/",
+      "method": "POST",
+      "summary": "Generate OTP for a voter (polling agent only)",
+      "auth": "Token required. Permissions: IsPollingAgent & CanGenerateOTP",
+      "request": {
+        "content_type": "application/json",
+        "path_params": { "voter_id": "string" }
+      },
+      "response": {
+        "200": { "body": { "otp": "string", "voter_id": "string" } },
+        "404": { "body": { "error": "Voter not found" } }
+      },
+      "notes": "OTP generation uses `Voter.generate_otp()` model method."
+    },
+    {
+      "path": "auth/users/",
+      "full_path": "/api/auth/users/",
+      "method": "GET/POST",
+      "summary": "List users or create a new user",
+      "auth": "Token required. Permissions vary by action (see backend).",
+      "request": {
+        "GET": { "query_params": { "page": "int (if paginated)" } },
+        "POST": {
+          "content_type": "application/json",
+          "body": {
+            "email": "string",
+            "password": "string (write-only)",
+            "role": "string (admin|polling_agent|superadmin)",
+            "election": "int (id)"
+          },
+          "example": {
+            "email": "newadmin@example.com",
+            "password": "secret",
+            "role": "admin",
+            "election": 1
+          }
+        }
+      },
+      "response": {
+        "200": { "body": "List of UserSerializer objects" },
+        "201": { "body": "Created UserSerializer object" }
+      }
+    },
+    {
+      "path": "auth/users/{id}/",
+      "full_path": "/api/auth/users/{id}/",
+      "method": "GET/PUT/PATCH/DELETE",
+      "summary": "Retrieve, update, partial-update, or delete a user",
+      "auth": "Token required. Permissions depend on action (CanViewUser, CanUpdateUser, CanDeleteUser)",
+      "request": {
+        "path_params": { "id": "int" },
+        "PUT/PATCH body": {
+          "email": "string",
+          "role": "string",
+          "election": "int",
+          "password": "string (write-only)"
+        }
+      },
+      "responses": {
+        "200": { "body": "UserSerializer" },
+        "204": { "body": {} },
+        "403": { "body": { "detail": "Permission denied" } }
+      }
+    },
+    {
+      "path": "auth/voters/",
+      "full_path": "/api/auth/voters/",
+      "method": "GET/POST",
+      "summary": "List voters or create a new voter",
+      "auth": "Token required (admin).",
+      "request": {
+        "POST": {
+          "content_type": "application/json",
+          "body": {
+            "voter_id": "string",
+            "password": "string",
+            "level": "string",
+            "gender": "string",
+            "department": "string",
+            "election": "int"
+          },
+          "example": {
+            "voter_id": "VOTER234",
+            "password": "pass",
+            "level": "200",
+            "gender": "female",
+            "department": "CS",
+            "election": 1
+          }
+        }
+      },
+      "response": {
+        "200": { "body": "List of VoterSerializer" },
+        "201": { "body": "Created VoterSerializer" }
+      }
+    },
+    {
+      "path": "auth/voters/upload-voters/",
+      "full_path": "/api/auth/voters/upload-voters/",
+      "method": "POST",
+      "summary": "Upload Excel file of voters (admin permission CanUploadVoters)",
+      "auth": "Token required",
+      "request": {
+        "content_type": "multipart/form-data",
+        "form_fields": { "file": "xlsx file" },
+        "example": { "file": "voters.xlsx" }
+      },
+      "response": {
+        "201": {
+          "body": {
+            "message": "Voters uploaded successfully",
+            "created_voters": ["VOTER1"],
+            "errors": []
+          }
+        },
+        "400": { "body": { "error": "Invalid Excel file or missing file" } }
+      },
+      "notes": "Excel expected columns: voter_id, password, level, gender, department. Admin's `request.user.election` will be assigned to created voters."
+    },
+    {
+      "path": "audit/logs/",
+      "full_path": "/api/audit/logs/",
+      "method": "GET",
+      "summary": "Retrieve audit logs (read-only)",
+      "auth": "Token required. Permissions: IsAdminOrSuperAdmin & CanViewLogs",
+      "request": {
+        "query_params": {
+          "page": "int (if paginated)",
+          "user": "int (user id) or email filter"
+        }
+      },
+      "response": {
+        "200": {
+          "body": [
+            {
+              "log_id": "int",
+              "user": "int|null",
+              "user_email": "string|null",
+              "voter": "string|null",
+              "voter_id": "string|null",
+              "log_action": "string",
+              "ip_address": "string",
+              "description": "string",
+              "log_time": "datetime"
+            }
+          ]
+        }
+      },
+      "notes": "Use filters in query params if implemented on backend (currently `get_queryset` returns all logs)."
+    },
+    {
+      "path": "elections/elections/",
+      "full_path": "/api/elections/elections/",
+      "method": "GET/POST",
+      "summary": "List elections or create an election",
+      "auth": "Token required. Permissions enforced: CanViewElection, CanCreateElection",
+      "request": {
+        "POST": {
+          "content_type": "application/json",
+          "body": {
+            "title": "string",
+            "start_time": "ISO datetime",
+            "end_time": "ISO datetime",
+            "is_active": "boolean"
+          },
+          "example": {
+            "title": "2025 Student Union",
+            "start_time": "2025-09-01T08:00:00Z",
+            "end_time": "2025-09-01T18:00:00Z",
+            "is_active": true
+          }
+        }
+      },
+      "response": {
+        "200": { "body": "List of ElectionSerializer" },
+        "201": { "body": "Created ElectionSerializer" }
+      }
+    },
+    {
+      "path": "elections/elections/{id}/",
+      "full_path": "/api/elections/elections/{id}/",
+      "method": "GET/PUT/PATCH/DELETE",
+      "summary": "Get/update/delete a specific election",
+      "auth": "Token required. Permissions vary per action.",
+      "request": {
+        "path_params": { "id": "int" },
+        "PATCH body": {
+          "title": "string (optional)",
+          "end_time": "ISO datetime (optional)",
+          "is_active": "boolean (optional)"
+        }
+      },
+      "response": {
+        "200": { "body": "ElectionSerializer" },
+        "204": { "body": {} },
+        "400": { "body": { "error": "string" } }
+      },
+      "notes": "Special action: `adjust_time` (POST) available at `/api/elections/elections/{id}/adjust_time/` to set `end_time`. Also `results` and `remaining_time` GET actions exist."
+    },
+    {
+      "path": "elections/elections/{id}/adjust_time/",
+      "full_path": "/api/elections/elections/{id}/adjust_time/",
+      "method": "POST",
+      "summary": "Adjust election end time",
+      "auth": "Token required. Permission: CanUpdateElection",
+      "request": {
+        "content_type": "application/json",
+        "path_params": { "id": "int" },
+        "body": { "end_time": "ISO datetime string" },
+        "example": { "end_time": "2025-09-01T20:00:00Z" }
+      },
+      "response": {
+        "200": { "body": { "message": "Election time adjusted successfully" } },
+        "400": { "body": { "error": "end_time is required" } }
+      }
+    },
+    {
+      "path": "elections/elections/{id}/results/",
+      "full_path": "/api/elections/elections/{id}/results/",
+      "method": "GET",
+      "summary": "Get aggregated results for an election",
+      "auth": "Token required. Permissions may restrict access after election end (see backend).",
+      "request": { "path_params": { "id": "int" } },
+      "response": {
+        "200": {
+          "body": [
+            {
+              "portfolio_id": "int",
+              "portfolio_name": "string",
+              "total_votes": "int",
+              "skipped_votes": "int",
+              "candidates": [
+                {
+                  "id": "int",
+                  "name": "string",
+                  "ballot_num": "int",
+                  "votes": "int",
+                  "percentage": "float"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "notes": "`percentage` uses total votes per portfolio (skipped votes excluded in candidate calculation)."
+    },
+    {
+      "path": "elections/elections/{id}/remaining_time/",
+      "full_path": "/api/elections/elections/{id}/remaining_time/",
+      "method": "GET",
+      "summary": "Get remaining minutes for an election",
+      "auth": "Token required. Permission: CanCheckElectionRemainingTime",
+      "request": { "path_params": { "id": "int" } },
+      "response": { "200": { "body": { "remaining_minutes": "int" } } }
+    },
+    {
+      "path": "elections/portfolios/",
+      "full_path": "/api/elections/portfolios/",
+      "method": "GET/POST",
+      "summary": "List portfolios or create a new portfolio",
+      "auth": "Token required (admin)",
+      "request": {
+        "POST": {
+          "content_type": "application/json",
+          "body": {
+            "port_name": "string",
+            "port_priority": "int",
+            "level_restriction": "string or null",
+            "gender_restriction": "string or null",
+            "department_restriction": "string or null",
+            "election": "int"
+          }
+        }
+      },
+      "response": {
+        "200": { "body": "List of PortfolioSerializer" },
+        "201": { "body": "Created PortfolioSerializer" }
+      }
+    },
+    {
+      "path": "elections/portfolios/{id}/update_level/",
+      "full_path": "/api/elections/portfolios/{id}/update_level/",
+      "method": "PATCH",
+      "summary": "Update level restriction for a portfolio",
+      "auth": "Token required. Permission: CanUpdatePortfolio",
+      "request": {
+        "path_params": { "id": "int" },
+        "body": { "level_restriction": "string or null" }
+      },
+      "response": {
+        "200": {
+          "body": { "message": "Level restriction updated successfully" }
+        },
+        "400": { "body": { "error": "string" } }
+      }
+    },
+    {
+      "path": "elections/portfolios/{id}/update_gender/",
+      "full_path": "/api/elections/portfolios/{id}/update_gender/",
+      "method": "PATCH",
+      "summary": "Update gender restriction",
+      "auth": "Token required. Permission: CanUpdatePortfolio",
+      "request": { "body": { "gender_restriction": "string or null" } },
+      "response": {
+        "200": {
+          "body": { "message": "Gender restriction updated successfully" }
+        }
+      }
+    },
+    {
+      "path": "elections/portfolios/{id}/update_department/",
+      "full_path": "/api/elections/portfolios/{id}/update_department/",
+      "method": "PATCH",
+      "summary": "Update department restriction",
+      "auth": "Token required. Permission: CanUpdatePortfolio",
+      "request": { "body": { "department_restriction": "string or null" } },
+      "response": {
+        "200": {
+          "body": { "message": "Department restriction updated successfully" }
+        }
+      }
+    },
+    {
+      "path": "elections/candidates/",
+      "full_path": "/api/elections/candidates/",
+      "method": "GET/POST",
+      "summary": "List or create candidates (profile picture upload supported)",
+      "auth": "Token required. Permissions: CanViewCandidate / CanCreateCandidate",
+      "request": {
+        "POST": {
+          "content_type": "multipart/form-data",
+          "form_fields": {
+            "cand_fname": "string",
+            "portfolio": "int",
+            "ballot_num": "int (optional)",
+            "profile_picture": "file (optional)",
+            "election": "int"
+          }
+        }
+      },
+      "response": { "201": { "body": "Created CandidateSerializer" } }
+    },
+    {
+      "path": "elections/candidates/{id}/update_ballot_num/",
+      "full_path": "/api/elections/candidates/{id}/update_ballot_num/",
+      "method": "PATCH",
+      "summary": "Update candidate's ballot number",
+      "auth": "Token required. Permission: CanUpdateCandidate",
+      "request": { "body": { "ballot_num": "int" } },
+      "response": {
+        "200": { "body": { "message": "Ballot number updated successfully" } },
+        "400": { "body": { "error": "No ballot_num provided" } }
+      }
+    },
+    {
+      "path": "elections/candidates/{id}/update_profile_picture/",
+      "full_path": "/api/elections/candidates/{id}/update_profile_picture/",
+      "method": "PATCH",
+      "summary": "Upload candidate profile picture",
+      "auth": "Token required. Permission: CanUpdateCandidate",
+      "request": {
+        "content_type": "multipart/form-data",
+        "form_fields": { "profile_picture": "file" }
+      },
+      "response": {
+        "200": {
+          "body": { "message": "Profile picture updated successfully" }
+        },
+        "400": { "body": { "error": "No profile_picture provided" } }
+      }
+    },
+    {
+      "path": "elections/candidates/{id}/update_portfolio/",
+      "full_path": "/api/elections/candidates/{id}/update_portfolio/",
+      "method": "PATCH",
+      "summary": "Move candidate to another portfolio",
+      "auth": "Token required. Permission: CanUpdateCandidate",
+      "request": { "body": { "portfolio": "int (portfolio id)" } },
+      "response": {
+        "200": { "body": { "message": "Portfolio updated successfully" } },
+        "404": {
+          "body": { "error": "Portfolio not found or not in your election" }
+        }
+      }
+    },
+    {
+      "path": "voting/voting/portfolios/",
+      "full_path": "/api/voting/portfolios/",
+      "method": "GET",
+      "summary": "Get portfolios and candidates available for a voter",
+      "auth": "None (voter_id query param required)",
+      "request": {
+        "query_params": { "voter_id": "string (required)" },
+        "example": { "voter_id": "VOTER123" }
+      },
+      "response": {
+        "200": {
+          "body": [
+            {
+              "port_id": "int",
+              "port_name": "string",
+              "has_voted": "boolean",
+              "candidates": [
+                {
+                  "cand_id": "int",
+                  "cand_fname": "string",
+                  "ballot_num": "int",
+                  "profile_picture": "url or null"
+                }
+              ]
+            }
+          ]
+        },
+        "404": { "body": { "error": "Voter not found" } },
+        "400": { "body": { "error": "voter_id is required" } }
+      }
+    },
+    {
+      "path": "voting/voting/cast_vote/",
+      "full_path": "/api/voting/voting/cast_vote/",
+      "method": "POST",
+      "summary": "Cast single or multiple votes",
+      "auth": "None (voter id is provided per vote). Backend validates election ongoing and double-vote rules.",
+      "request": {
+        "content_type": "application/json",
+        "body": [
+          {
+            "voter_id": "string",
+            "portfolio": "int",
+            "candidate": "int or null",
+            "skip_vote": "boolean"
+          }
+        ],
+        "example": [
+          {
+            "voter_id": "VOTER123",
+            "portfolio": 1,
+            "candidate": 5,
+            "skip_vote": false
+          }
+        ]
+      },
+      "response": {
+        "201": {
+          "body": {
+            "results": [
+              {
+                "vote_id": "int",
+                "candidate": "int|null",
+                "candidate_name": "string",
+                "portfolio": "int",
+                "portfolio_name": "string",
+                "skip_vote": "bool",
+                "vote_time": "datetime",
+                "election": "int",
+                "election_title": "string",
+                "has_voted": "bool"
+              }
+            ]
+          }
+        },
+        "400": { "body": { "errors": "array of errors and partial results" } }
+      },
+      "notes": "Can accept a list of votes or a single vote object. VoteSerializer enforces that either `candidate` OR `skip_vote` must be set (not both)."
+    },
+    {
+      "path": "voting/vote-time/",
+      "full_path": "/api/voting/vote-time/",
+      "method": "GET",
+      "summary": "Get server time and election time info",
+      "auth": "None (query param `election` required)",
+      "request": { "query_params": { "election": "int (election id)" } },
+      "response": {
+        "200": {
+          "body": {
+            "server_time": "datetime",
+            "election_start": "datetime",
+            "election_end": "datetime",
+            "time_remaining_minutes": "int"
+          }
+        },
+        "400": { "body": { "error": "election id required" } },
+        "404": { "body": { "error": "Election not found" } }
+      }
+    }
+  ]
+}
