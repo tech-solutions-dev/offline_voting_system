@@ -42,7 +42,7 @@ class UserLoginView(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 class VoterLoginView(generics.GenericAPIView):
-    serializer_class = VoterSerializer
+    serializer_class = VoterLoginSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
