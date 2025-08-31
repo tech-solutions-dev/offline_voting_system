@@ -42,30 +42,27 @@ class UserLoginView(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 class VoterLoginView(generics.GenericAPIView):
-    serializer_class = VoterSerializer
+    serializer_class = VoterLoginSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = VoterLoginSerializer(data=request.data)
         if serializer.is_valid():
-
             voter = serializer.validated_data['voter']
             token = serializer.validated_data['token']
-            print(voter)
 
             # Check if election is ongoing
-        # Check if election is ongoing
-        if not voter.election.is_ongoing:
-            return Response({'error': 'Election is not currently active'}, status=status.HTTP_400_BAD_REQUEST)
-        if voter.election.only_admin_allowed():
-            return Response({'error': 'Only admin can login'}, status=status.HTTP_403_FORBIDDEN)
-        # Check if voter has already voted
-        has_voted = Vote.objects.filter(voter=voter, election=voter.election).exists()
-        if has_voted:
-            return Response({'error': 'You have already voted'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        log_activity(request, 'login', f'Voter {voter.voter_id} logged in', voter=voter)
-        return Response({
+            if not voter.election.is_ongoing:
+                return Response({'error': 'Election is not currently active'}, status=status.HTTP_400_BAD_REQUEST)
+            if voter.election.only_admin_allowed():
+                return Response({'error': 'Only admin can login'}, status=status.HTTP_403_FORBIDDEN)
+            # Check if voter has already voted
+            has_voted = Vote.objects.filter(voter=voter, election=voter.election).exists()
+            if has_voted:
+                return Response({'error': 'You have already voted'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            log_activity(request, 'login', f'Voter {voter.voter_id} logged in', voter=voter)
+            return Response({
                 'voter': {
                     'token': token,
                     'voter_id': voter.voter_id,
@@ -74,7 +71,7 @@ class VoterLoginView(generics.GenericAPIView):
                 },
                 'message': 'Login successful'
             })
-        
+        # Only return serializer errors if not valid
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class VoterGenerateOTPView(generics.GenericAPIView):
     serializer_class = VoterSerializer
@@ -249,4 +246,3 @@ class MeView(APIView):
         if hasattr(user, 'voter_id'):
             return Response(VoterSerializer(user).data)
         return Response(UserSerializer(user).data)
-

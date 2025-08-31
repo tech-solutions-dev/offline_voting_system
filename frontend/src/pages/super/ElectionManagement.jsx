@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Modal } from "../../components/shared/Modal";
 import api from "../../services/api";
 import { toast } from "react-toastify";
-import { fetchElections } from "../../services/Utils";
+import { fetchElections } from "../../services/utils";
 
 // Election Management Component
 export function ElectionManagement() {

@@ -12,7 +12,6 @@ export function AdminUserManagement() {
   const [selectedAdmin, setSelectedAdmin] = useState(null);
 
   const [newAdmin, setNewAdmin] = useState({
-    username: "",
     email: "",
     role: "admin",
     password: "",
@@ -71,7 +70,7 @@ export function AdminUserManagement() {
     e.preventDefault();
     try {
       const response = await api.put(
-        `api/auth/users/${selectedAdmin.id}/`,
+        `http://localhost:8000/api/auth/users/${selectedAdmin.id}/`,
         selectedAdmin
       );
       if (response.status === 200) {
@@ -94,7 +93,7 @@ export function AdminUserManagement() {
       return;
     try {
       const response = await api.delete(`${BASE_URL}api/auth/users/${id}/`);
-      if (response.status === 200) {
+      if (response.success) {
         toast.success("Admin deactivated successfully");
         fetchAdmins();
       } else {
@@ -316,9 +315,6 @@ export function AdminUserManagement() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Admin Username
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Email
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -338,9 +334,6 @@ export function AdminUserManagement() {
           <tbody className="bg-white divide-y divide-gray-200">
             {admins.map((admin) => (
               <tr key={admin.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {admin.username}
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {admin.email}
                 </td>
@@ -348,7 +341,7 @@ export function AdminUserManagement() {
                   {admin.role}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {admin.election_title || "—"}
+                  {admin.election || "—"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
