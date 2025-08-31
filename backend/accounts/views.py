@@ -43,6 +43,7 @@ class UserLoginView(generics.GenericAPIView):
 
 class VoterLoginView(generics.GenericAPIView):
     serializer_class = VoterLoginSerializer
+    serializer_class = VoterLoginSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
