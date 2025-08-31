@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Modal } from "../../components/shared/Modal";
-import api from "../../services/api";
+import api from "../../utils/api";
 import { toast } from "react-toastify";
-import { fetchElections } from "../../services/utils";
+import { fetchElections } from "../../utils/utils";
 
 // Polling Agents Management Component
 export function PollingAgentsManagement() {
@@ -15,8 +15,6 @@ export function PollingAgentsManagement() {
     election: "",
     password: "",
   });
-
-  const BASE_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const loadAgents = async () => {
@@ -33,7 +31,7 @@ export function PollingAgentsManagement() {
     };
     const loadElections = async () => {
       try {
-        const elections = await fetchElections(BASE_URL);
+        const elections = await fetchElections();
         setElections(elections);
       } catch (err) {
         console.error("Error fetching elections:", err);
@@ -42,7 +40,7 @@ export function PollingAgentsManagement() {
 
     loadAgents();
     loadElections();
-  }, [BASE_URL]);
+  }, []);
 
   const generatePassword = () => {
     const chars =
@@ -57,7 +55,7 @@ export function PollingAgentsManagement() {
   const createAgent = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`${BASE_URL}api/auth/users/`, newAgent);
+      const response = await api.post(`api/auth/users/`, newAgent);
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Polling agent created successfully");

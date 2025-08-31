@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Modal } from "../../components/shared/Modal";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
-import { fetchElections } from "../../services/utils";
+import { fetchElections } from "../../utils/utils";
 
 // Election Management Component
 export function ElectionManagement() {
@@ -44,7 +44,7 @@ export function ElectionManagement() {
 
   useEffect(() => {
     const loadElections = async () => {
-      const elections = await fetchElections(BASE_URL);
+      const elections = await fetchElections();
       setElections(elections);
     };
     loadElections();
@@ -59,7 +59,7 @@ export function ElectionManagement() {
         toast.success("Election deleted successfully");
         setShowDeleteConfirm(false);
         setSelectedElection(null);
-        fetchElections(BASE_URL);
+        fetchElections();
       }
     } catch (error) {
       toast.error("Error deleting election");
@@ -81,7 +81,7 @@ export function ElectionManagement() {
           is_active: false,
         });
         setShowCreateForm(false);
-        fetchElections(BASE_URL);
+        fetchElections();
       } else {
         toast.error("Failed to create election");
       }
@@ -110,7 +110,7 @@ export function ElectionManagement() {
         });
         setShowEditForm(false);
         setSelectedElection(null);
-        fetchElections(BASE_URL);
+        fetchElections();
       } else {
         toast.error("Failed to update election");
       }

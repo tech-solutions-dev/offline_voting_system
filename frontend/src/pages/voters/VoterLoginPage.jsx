@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setToken, setUser } from "../../utils/auth";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
-
 export default function VoterLoginPage() {
   const [formData, setFormData] = useState({
     voter_id: "",

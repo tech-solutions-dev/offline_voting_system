@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../components/shared/Modal";
-import api from "../../services/api";
-import { fetchElections } from "../../services/utils";
+import api from "../../utils/api";
+import { fetchElections } from "../../utils/utils";
 import { toast } from "react-toastify";
 
 export function AdminUserManagement() {
@@ -18,12 +18,10 @@ export function AdminUserManagement() {
     election: "",
   });
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
-
   // Load elections
   useEffect(() => {
     const loadElections = async () => {
-      const data = await fetchElections(BASE_URL);
+      const data = await fetchElections();
       setElections(data);
     };
     loadElections();
@@ -33,7 +31,7 @@ export function AdminUserManagement() {
   // Load admins
   const fetchAdmins = async () => {
     try {
-      const response = await api.get(`${BASE_URL}api/auth/users/`);
+      const response = await api.get(`api/auth/users/`);
       setAdmins(response.data.results || []);
     } catch (error) {
       console.error("Error fetching admins", error);
@@ -44,7 +42,7 @@ export function AdminUserManagement() {
   const handleCreateAdmin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`${BASE_URL}api/auth/users/`, newAdmin);
+      const response = await api.post(`api/auth/users/`, newAdmin);
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Admin created successfully");
@@ -92,7 +90,7 @@ export function AdminUserManagement() {
     if (!window.confirm("Are you sure you want to deactivate this admin?"))
       return;
     try {
-      const response = await api.delete(`${BASE_URL}api/auth/users/${id}/`);
+      const response = await api.delete(`api/auth/users/${id}/`);
       if (response.success) {
         toast.success("Admin deactivated successfully");
         fetchAdmins();

@@ -101,9 +101,9 @@ class UserViewSet(viewsets.ModelViewSet):
         if action in ['list', 'retrieve']:
             permission_classes = [CanViewUser]
         elif action == 'create':
-            if requested_role == 'admin':
+            if requested_role == 'superadmin':
                 permission_classes = [CanCreateAdminUsers]
-            elif requested_role == 'polling_agent':
+            elif requested_role == 'admin':
                 permission_classes = [CanCreatePollingAgents]
             else:
                 permission_classes = []

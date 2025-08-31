@@ -8,9 +8,11 @@ class TokenAuthentication(BaseAuthentication):
         if not auth_header or not isinstance(auth_header, str):
             return None
         parts = auth_header.strip().split()
-        if len(parts) != 2 or parts[0].lower() != 'bearer':
+        if len(parts) != 2 or  parts[0].lower() != 'token':
             return None
-        token = parts[1]
+        print(parts)
+        token = parts[1]  
+        print(token)
         if not token:
             return None
         user = User.objects.filter(token=token).first()

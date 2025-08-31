@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
+import { removeToken } from "../../utils/auth";
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState("elections");
   const [elections, setElections] = useState([]);
   const navigate = useNavigate();
-  const BASE_URL = import.meta.env.VITE_API_URL || "";
 
   const handleLogout = () => {
-    localStorage.removeItem("election_token");
-    localStorage.removeItem("user");
+    removeToken();
     navigate("/admin/login");
-
   };
 
   return (
