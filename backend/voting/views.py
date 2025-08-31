@@ -35,45 +35,69 @@ class VotingViewSet(viewsets.ViewSet):
             return Response(eligible_portfolios)
         except Voter.DoesNotExist:
             return Response({'error': 'Voter not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    @action(detail=False, methods=['post'])
-    def cast_vote(self, request):
-        """
-        Accepts a JSON payload with a list of votes:
-        [
-            {
-                "voter_id": "VOTER123",
-                "portfolio": <portfolio_id>,
-                "candidate": <candidate_id or null>,
-                "skip_vote": <true or false>
-            },
-            ...
-        ]
-        """
-        votes_data = request.data if isinstance(request.data, list) else [request.data]
-        results = []
-        errors = []
-        for data in votes_data:
-            voter_id = data.get('voter_id')
+@action(detail=False, methods=['post'])
+def cast_vote(self, request):
+    """
+    Accepts a JSON payload with a list of votes:
+    [
+        {
+            "voter_id": "VOTER123",
+            "portfolio": <portfolio_id>,
+            "candidate": <candidate_id or null>,
+            "skip_vote": <true or false>
+        },
+        ...
+    ]
+    """
+    votes_data = request.data if isinstance(request.data, list) else [request.data]
+    results = []
+    errors = []
+    voters_processed = set()  # Track voters to avoid duplicate processing
+    
+    for data in votes_data:
+        voter_id = data.get('voter_id')
+        try:
+            voter = Voter.objects.get(voter_id=voter_id)
+        except Voter.DoesNotExist:
+            errors.append({'error': f'Voter {voter_id} not found'})
+            continue
+        
+        # Check if election is ongoing
+        if not voter.election.is_ongoing:
+            errors.append({'error': f'Election is not currently active for voter {voter_id}'})
+            continue
+        
+        # Check if voter has already voted (only check once per voter)
+        if voter_id not in voters_processed:
+            if voter.has_voted:
+                errors.append({'error': f'Voter {voter_id} has already voted'})
+                continue
+            voters_processed.add(voter_id)
+        
+        # Validate and save the vote
+        serializer = VoteSerializer(data=data)
+        if serializer.is_valid():
+            vote = serializer.save(election=voter.election)
+            log_activity(request, 'cast_vote', f'Vote cast for {vote.portfolio.port_name}', voter=voter)
+            results.append(VoteSerializer(vote).data)
+        else:
+            errors.append(serializer.errors)
+    
+    # Mark voters as having voted (only if no errors occurred for their votes)
+    if results:  # Only if at least one vote was successfully cast
+        successful_voter_ids = [result.get('voter_id') for result in results if result.get('voter_id')]
+        # Update has_voted for all voters who successfully cast votes
+        for voter_id in set(successful_voter_ids):  # Use set to avoid duplicates
             try:
                 voter = Voter.objects.get(voter_id=voter_id)
+                voter.has_voted = True
+                voter.save()
             except Voter.DoesNotExist:
-                errors.append({'error': f'Voter {voter_id} not found'})
-                continue
-            if not voter.election.is_ongoing:
-                errors.append({'error': f'Election is not currently active for voter {voter_id}'})
-                continue
-            serializer = VoteSerializer(data=data)
-            if serializer.is_valid():
-                vote = serializer.save(election=voter.election)
-                log_activity(request, 'cast_vote', f'Vote cast for {vote.portfolio.port_name}', voter=voter)
-                results.append(VoteSerializer(vote).data)
-            else:
-                errors.append(serializer.errors)
-        if errors:
-            return Response({'errors': errors, 'results': results}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'results': results}, status=status.HTTP_201_CREATED)
-
+                pass  # This shouldn't happen, but just in case
+    
+    if errors:
+        return Response({'errors': errors, 'results': results}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'results': results}, status=status.HTTP_201_CREATED)
 class VoteTimeAPIView(APIView):
     """
     Returns the current server time and election time info.

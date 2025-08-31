@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import api from "../../services/api";
+import api from "../../utils/api";
+import { getUser } from "../../utils/auth";
 
 export default function GenerateVoterPassword() {
   const [studentId, setStudentId] = useState("");
@@ -13,24 +14,31 @@ export default function GenerateVoterPassword() {
       toast.error("Please enter a Student ID");
       return;
     }
-
     try {
       setLoading(true);
       setOtp(null);
       setVoter(null);
-      const response = await api.post(`api/auth/generate-otp/${studentId}/`);
-      if (response.status !== 200) {
-        throw new Error("Failed to generate OTP");
+
+      // Call backend endpoint to generate OTP for the voter
+      const user = getUser();
+      if (!user) {
+        toast.error("Not authenticated as polling agent");
+        setLoading(false);
+        return;
       }
-      const { student_id, otp } = response.data;
 
-      setVoter({ student_id });
-      setOtp(otp);
-
-      toast.success("OTP generated successfully!");
+      const response = await api.post(`/api/auth/generate-otp/${studentId}/`);
+      if (response.status === 200) {
+        const { otp: generatedOtp, voter_id } = response.data;
+        setVoter({ student_id: voter_id || studentId });
+        setOtp(generatedOtp || null);
+        toast.success("OTP generated successfully");
+      } else {
+        toast.error("Failed to generate OTP");
+      }
     } catch (error) {
       console.error(error);
-      toast.error("Error generating OTP");
+      toast.error(error.response?.data?.error || "Error generating password");
     } finally {
       setLoading(false);
     }

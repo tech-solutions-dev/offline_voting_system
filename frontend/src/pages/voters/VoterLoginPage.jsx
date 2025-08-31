@@ -1,6 +1,10 @@
-import api from "../../services/api";
+import api from "../../utils/api";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { setToken, setUser } from "../../utils/auth";
+
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function VoterLoginPage() {
   const [formData, setFormData] = useState({
@@ -8,7 +12,6 @@ export default function VoterLoginPage() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
 
@@ -19,20 +22,24 @@ export default function VoterLoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      const response = await api.post(
-        `${BASE_URL}api/auth/voter_login/`,
-        formData
-      );
+      const response = await api.post(`/api/auth/voter_login/`, formData);
 
       if (response.status === 200) {
-        console.log("Voter logged in:", response.data);
+        const { voter } = response.data;
+        const token = voter?.token;
+        if (!token) {
+          toast.error("Invalid server response");
+          return;
+        }
+        setToken(token);
+        setUser({ role: "voter", voter_id: voter.voter_id, level: voter.level, gender: voter.gender });
         navigate("/vote");
+        toast.success("Login successful");
       }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
-      alert(error.response?.data?.error || "Invalid credentials");
+      toast.error(error.response?.data?.error || "Invalid credentials");
     } finally {
       setIsLoading(false);
     }

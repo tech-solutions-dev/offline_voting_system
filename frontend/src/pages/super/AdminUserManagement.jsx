@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../components/shared/Modal";
-import api from "../../services/api";
-import { fetchElections } from "../../services/utils";
-import { toast } from "react-toastify";
-
+import api from "../../utils/api";
+// Admin User Management Component
 export function AdminUserManagement() {
   const [admins, setAdmins] = useState([]);
   const [elections, setElections] = useState([]);
@@ -44,15 +42,15 @@ export function AdminUserManagement() {
   const handleCreateAdmin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`${BASE_URL}api/auth/users/`, newAdmin);
+      const response = await api.post(`${BASE_URL}api/users/`, admins);
 
       if (response.status === 201 || response.status === 200) {
-        toast.success("Admin created successfully");
+        toast.success(response.message);
         setNewAdmin({
+          name: "",
           email: "",
-          role: "admin",
+          role: "Election Admin",
           password: "",
-          election: "",
         });
         setShowCreateForm(false);
         fetchAdmins();
@@ -97,10 +95,10 @@ export function AdminUserManagement() {
         toast.success("Admin deactivated successfully");
         fetchAdmins();
       } else {
-        toast.error("Failed to deactivate admin");
+        toast.error("Failed to create election");
       }
     } catch (error) {
-      toast.error("Error deactivating admin");
+      toast.error("Error creating election");
       console.error(error);
     }
   };
@@ -144,51 +142,27 @@ export function AdminUserManagement() {
                   />
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Role
-                  </label>
-                  <select
-                    value={newAdmin.role}
-                    onChange={(e) =>
-                      setNewAdmin({ ...newAdmin, role: e.target.value })
-                    }
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-                  >
-                    <option value="admin">Election Admin (EC)</option>
-                    <option value="polling_agent">Polling Agent</option>
-                    <option value="superadmin">
-                      System Admin (Super Admin)
-                    </option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Temporary Password
-                  </label>
-                  <input
-                    type="password"
-                    required
-                    value={newAdmin.password}
-                    onChange={(e) =>
-                      setNewAdmin({ ...newAdmin, password: e.target.value })
-                    }
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-                  />
-                </div>
-              </div>
-
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Assign to Election
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Role</label>
                 <select
-                  value={newAdmin.election}
-                  onChange={(e) =>
-                    setNewAdmin({ ...newAdmin, election: e.target.value })
-                  }
+                  value={newAdmin.role}
+                  onChange={(e) => setNewAdmin({ ...newAdmin, role: e.target.value })}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                >
+                  <option value="Election Admin">Election Admin (EC)</option>
+                  <option value="Polling Agent">Polling Agent</option>
+                  <option value="System Admin">System Admin (Super Admin)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Temporary Password</label>
+                <input
+                  type="password"
+                  required
+                  value={newAdmin.password}
+                  onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
                   required
                 >

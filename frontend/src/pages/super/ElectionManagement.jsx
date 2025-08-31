@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Modal } from "../../components/shared/Modal";
-import api from "../../services/api";
+import api from "../../utils/api";
 import { toast } from "react-toastify";
 import { fetchElections } from "../../services/utils";
 
@@ -11,8 +11,6 @@ export function ElectionManagement() {
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selectedElection, setSelectedElection] = useState(null);
-
-  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const [newElection, setNewElection] = useState({
     title: "",
@@ -55,7 +53,7 @@ export function ElectionManagement() {
   const confirmDelete = async () => {
     try {
       const response = await api.delete(
-        `${BASE_URL}api/elections/elections/${selectedElection.id}/`
+        `/api/elections/elections/${selectedElection.id}/`
       );
       if (response.status === 200 || response.status === 204) {
         toast.success("Election deleted successfully");
@@ -72,10 +70,7 @@ export function ElectionManagement() {
     e.preventDefault();
 
     try {
-      const response = await api.post(
-        `${BASE_URL}api/elections/elections/`,
-        newElection
-      );
+      const response = await api.post(`/api/elections/elections/`, newElection);
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Election created successfully");
@@ -101,7 +96,7 @@ export function ElectionManagement() {
 
     try {
       const response = await api.put(
-        `${BASE_URL}api/elections/elections/${selectedElection.id}/`,
+        `/api/elections/elections/${selectedElection.id}/`,
         editElection
       );
 
@@ -392,44 +387,45 @@ export function ElectionManagement() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {elections.map((election) => (
-              <tr key={election.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {election.title}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 py-1 text-xs rounded-full ${
-                      election.is_active
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {election.is_active ? "Active" : "Inactive"}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {election.start_time}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {election.end_time}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <button
-                    className="text-indigo-600 hover:text-indigo-900 mr-3"
-                    onClick={() => handleEdit(election)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="text-red-600 hover:text-red-900"
-                    onClick={() => handleDelete(election)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {elections &&
+              elections.map((election) => (
+                <tr key={election.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {election.title}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 py-1 text-xs rounded-full ${
+                        election.is_active
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {election.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {election.start_time}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {election.end_time}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <button
+                      className="text-indigo-600 hover:text-indigo-900 mr-3"
+                      onClick={() => handleEdit(election)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-600 hover:text-red-900"
+                      onClick={() => handleDelete(election)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

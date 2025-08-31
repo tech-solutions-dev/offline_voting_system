@@ -43,6 +43,7 @@ class UserLoginView(generics.GenericAPIView):
 
 class VoterLoginView(generics.GenericAPIView):
     serializer_class = VoterLoginSerializer
+    serializer_class = VoterLoginSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
@@ -57,8 +58,8 @@ class VoterLoginView(generics.GenericAPIView):
             if voter.election.only_admin_allowed():
                 return Response({'error': 'Only admin can login'}, status=status.HTTP_403_FORBIDDEN)
             # Check if voter has already voted
-            has_voted = Vote.objects.filter(voter=voter, election=voter.election).exists()
-            if has_voted:
+            # has_voted = Vote.objects.filter(voter=voter, election=voter.election).exists()
+            if voter.has_voted:
                 return Response({'error': 'You have already voted'}, status=status.HTTP_400_BAD_REQUEST)
             
             log_activity(request, 'login', f'Voter {voter.voter_id} logged in', voter=voter)
